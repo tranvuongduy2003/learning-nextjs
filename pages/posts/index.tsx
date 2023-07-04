@@ -1,4 +1,5 @@
 import { GetStaticProps, GetStaticPropsContext } from "next";
+import Link from "next/link";
 
 interface IPost {
   id: string;
@@ -17,7 +18,11 @@ export default function PostListPage({ posts }: IPostListPageProps) {
       Post List Page
       <ul>
         {posts.map((post) => (
-          <li key={post.id}>{post.title}</li>
+          <li key={post.id}>
+            <Link href={`/posts/${post.id}`}>
+              <a>{post.title}</a>
+            </Link>
+          </li>
         ))}
       </ul>
     </div>
