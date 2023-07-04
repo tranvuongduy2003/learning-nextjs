@@ -1,9 +1,24 @@
-import React from "react";
+import { GetStaticProps } from "next";
+import dynamic from "next/dynamic";
 
-interface IAboutPageProps {}
+export interface AboutPageProps {}
 
-const AboutPage: React.FunctionComponent<IAboutPageProps> = (props) => {
-  return <div>About Page</div>;
+const Header = dynamic(() => import("@/components/common/header"), {
+  ssr: false,
+});
+
+export default function AboutPage(props: AboutPageProps) {
+  return (
+    <div>
+      <h1>About Page</h1>
+
+      <Header />
+    </div>
+  );
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {},
+  };
 };
-
-export default AboutPage;
