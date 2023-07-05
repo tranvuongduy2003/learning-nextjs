@@ -1,3 +1,5 @@
+import { MainLayout } from "@/components/layout";
+import { NextPageWithLayout } from "@/models/common";
 import { GetStaticProps } from "next";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
@@ -9,7 +11,7 @@ const Header = dynamic(() => import("@/components/common/header"), {
   ssr: false,
 });
 
-export default function AboutPage(props: AboutPageProps) {
+const AboutPage: NextPageWithLayout = (props: AboutPageProps) => {
   const router = useRouter();
   const [postList, setPostList] = useState([]);
 
@@ -59,7 +61,11 @@ export default function AboutPage(props: AboutPageProps) {
       <button onClick={handleNextClick}>Next page</button>
     </div>
   );
-}
+};
+
+AboutPage.Layout = MainLayout;
+
+export default AboutPage;
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
