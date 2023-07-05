@@ -1,11 +1,18 @@
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext } from "next";
+import { useRouter } from "next/router";
 
 interface PostPageProps {
   post: any;
 }
 
 export default function PostPage({ post }: PostPageProps) {
-  console.log(post);
+  const router = useRouter();
+
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
+
+  if (!post) return null;
 
   return (
     <div>
@@ -28,8 +35,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
   return {
     paths: data.data.map((post: any) => ({ params: { postId: post.id } })),
-    fallback: false,
+    fallback: "blocking",
   };
+
+  // blocking: nếu chưa có dữ liệu sẽ request lên server để lấy data về ngay
+  // true: nếu chưa có data thì sẽ trả về version trước đó, còn nextjs sẽ âm thầm request lên server và cập nhật version mới, reload lại lần nữa sẽ thấy được data mới
+  // false: nếu không có thì trả về 404 not found page
 };
 
 export const getStaticProps: GetStaticProps<PostPageProps> = async (
@@ -49,5 +60,6 @@ export const getStaticProps: GetStaticProps<PostPageProps> = async (
     props: {
       post: data,
     },
+    revalidate: 5,
   };
 };
