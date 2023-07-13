@@ -1,15 +1,15 @@
-import { MainLayout } from "@/components/layout";
+import { Header } from "@/components/common";
+import { AdminLayout } from "@/components/layout";
 import { NextPageWithLayout } from "@/models/common";
 import { GetStaticProps } from "next";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export interface AboutPageProps {}
 
-const Header = dynamic(() => import("@/components/common/header"), {
-  ssr: false,
-});
+// const Header = dynamic(() => import("@/components/common"), {
+//   ssr: false,
+// });
 
 const AboutPage: NextPageWithLayout = (props: AboutPageProps) => {
   const router = useRouter();
@@ -63,7 +63,7 @@ const AboutPage: NextPageWithLayout = (props: AboutPageProps) => {
   );
 };
 
-AboutPage.Layout = MainLayout;
+AboutPage.Layout = AdminLayout;
 
 export default AboutPage;
 
