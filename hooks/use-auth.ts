@@ -4,15 +4,15 @@ import { PublicConfiguration } from "swr/_internal/dist/index";
 
 const MILLISECOND_PER_HOUR = 60 * 60 * 1000;
 
-export function useAuth(option?: Partial<PublicConfiguration>) {
+export function useAuth(options?: Partial<PublicConfiguration>) {
   const {
     data: profile,
     error,
     mutate,
-  } = useSWR("/profile", null, {
+  } = useSWR("/profile", {
     dedupingInterval: MILLISECOND_PER_HOUR,
     revalidateOnFocus: false,
-    ...option,
+    ...options,
   });
 
   const firstLoading = profile === undefined && error === undefined;

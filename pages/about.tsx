@@ -1,6 +1,7 @@
 import { Header } from "@/components/common";
 import { AdminLayout } from "@/components/layout";
 import { NextPageWithLayout } from "@/models/common";
+import { Box, Typography } from "@mui/material";
 import { GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -47,19 +48,19 @@ const AboutPage: NextPageWithLayout = (props: AboutPageProps) => {
   }
 
   return (
-    <div>
-      <h1>About Page</h1>
+    <Box>
+      <Typography component="h1" variant="h3" color="primary.main">
+        About Page
+      </Typography>
 
       <Header />
-
       <ul>
         {postList.map((post: any) => (
           <li key={post.id}>{post.title}</li>
         ))}
       </ul>
-
       <button onClick={handleNextClick}>Next page</button>
-    </div>
+    </Box>
   );
 };
 

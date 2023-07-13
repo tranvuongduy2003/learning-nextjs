@@ -23,26 +23,32 @@ export default function handler(
   }
 
   return new Promise((resolve) => {
-    const handleLoginResponse: ProxyResCallback = (proxyRes, req, res) => {
+    req.headers.cookie = "";
+
+    const handleLoginResponse: ProxyResCallback = (
+      proxyRes,
+      request,
+      response
+    ) => {
       let body = "";
 
-      proxyRes.on("data", (chunk) => {
+      proxyRes.on("data", function (chunk) {
         body += chunk;
       });
 
-      proxyRes.on("end", () => {
-        const { accessToken, expiredAt } = JSON.parse(body);
-
-        const cookies = new Cookies(req, res, {
-          secure: process.env.NODE_ENV !== "development",
-        });
-        cookies.set("access_token", accessToken, {
-          httpOnly: true,
-          sameSite: "lax",
-          expires: new Date(expiredAt),
-        });
-
+      proxyRes.on("end", function () {
         try {
+          const { accessToken, expiredAt } = JSON.parse(body);
+
+          const cookies = new Cookies(req, res, {
+            secure: process.env.NODE_ENV !== "development",
+          });
+          cookies.set("access_token", accessToken, {
+            httpOnly: true,
+            sameSite: "lax",
+            expires: new Date(expiredAt),
+          });
+
           (res as NextApiResponse)
             .status(200)
             .json({ message: "login successfully" });
@@ -51,6 +57,8 @@ export default function handler(
             .status(500)
             .json({ message: "something went wrong" });
         }
+
+        resolve(true);
       });
     };
 
@@ -58,7 +66,7 @@ export default function handler(
     proxy.web(req, res, {
       target: process.env.API_URL,
       changeOrigin: true,
-      selfHandleResponse: false,
+      selfHandleResponse: true,
     });
   });
 }
